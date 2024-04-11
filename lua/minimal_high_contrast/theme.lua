@@ -282,7 +282,7 @@ local theme = lush(function(injected_functions)
 		-- sym"@repeat"            { }, -- Repeat
 		-- sym"@label"             { }, -- Label
 		-- sym"@operator"          { }, -- Operator
-		sym("@keyword")({ fg = colors.neutral_purple }), -- Keyword
+		sym("@keyword")({ fg = colors.bright_purple }), -- Keyword
 		-- sym"@exception"         { }, -- Exception
 		-- sym"@variable"          { }, -- Identifier
 		-- sym"@type"              { }, -- Type
