@@ -43,8 +43,15 @@
 --  `:lua require('lush').ify()`
 
 local lush = require("lush")
-local hsl = lush.hsl
 local colors = require("minimal_high_contrast.colors")
+--
+--
+--
+local error_red = colors.neutral_red
+local warn_yellow = colors.neutral_yellow
+local info_blue = colors.neutral_blue
+local hint_gray = colors.dark2
+local ok_green = colors.neutral_green
 
 -- LSP/Linters mistakenly show `undefined global` errors in the spec, they may
 -- support an annotation like the following. Consult your server documentation.
@@ -94,8 +101,8 @@ local theme = lush(function(injected_functions)
 		-- Substitute     { }, -- |:substitute| replacement text highlighting
 
 		LineNr({ fg = colors.light2 }), -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-		LineNrAbove({ fg = colors.light4 }), -- Line number for when the 'relativenumber' option is set, above the cursor line
-		LineNrBelow({ fg = colors.light4 }), -- Line number for when the 'relativenumber' option is set, below the cursor line
+		LineNrAbove({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, above the cursor line
+		LineNrBelow({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, below the cursor line
 		CursorLineNr({ fg = colors.light2 }), -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
 
 		-- CursorLineFold { }, -- Like FoldColumn when 'cursorline' is set for the cursor line
@@ -204,34 +211,39 @@ local theme = lush(function(injected_functions)
 		-- LspCodeLensSeparator        { } , -- Used to color the seperator between two or more code lens.
 		-- LspSignatureActiveParameter { } , -- Used to highlight the active parameter in the signature help. See |vim.lsp.handlers.signature_help()|.
 
+		--
+		-- Diagnostics
 		-- See :h diagnostic-highlights, some groups may not be listed, submit a PR fix to lush-template!
 		--
-		-- DiagnosticError            { } , -- Used as the base highlight group. Other Diagnostic highlights link to this by default (except Underline)
-		-- DiagnosticWarn             { } , -- Used as the base highlight group. Other Diagnostic highlights link to this by default (except Underline)
-		-- DiagnosticInfo             { } , -- Used as the base highlight group. Other Diagnostic highlights link to this by default (except Underline)
-		-- DiagnosticHint             { } , -- Used as the base highlight group. Other Diagnostic highlights link to this by default (except Underline)
-		-- DiagnosticOk               { } , -- Used as the base highlight group. Other Diagnostic highlights link to this by default (except Underline)
-		-- DiagnosticVirtualTextError { } , -- Used for "Error" diagnostic virtual text.
-		-- DiagnosticVirtualTextWarn  { } , -- Used for "Warn" diagnostic virtual text.
-		-- DiagnosticVirtualTextInfo  { } , -- Used for "Info" diagnostic virtual text.
-		-- DiagnosticVirtualTextHint  { } , -- Used for "Hint" diagnostic virtual text.
-		-- DiagnosticVirtualTextOk    { } , -- Used for "Ok" diagnostic virtual text.
-		-- DiagnosticUnderlineError   { } , -- Used to underline "Error" diagnostics.
-		-- DiagnosticUnderlineWarn    { } , -- Used to underline "Warn" diagnostics.
-		-- DiagnosticUnderlineInfo    { } , -- Used to underline "Info" diagnostics.
-		-- DiagnosticUnderlineHint    { } , -- Used to underline "Hint" diagnostics.
-		-- DiagnosticUnderlineOk      { } , -- Used to underline "Ok" diagnostics.
-		-- DiagnosticFloatingError    { } , -- Used to color "Error" diagnostic messages in diagnostics float. See |vim.diagnostic.open_float()|
-		-- DiagnosticFloatingWarn     { } , -- Used to color "Warn" diagnostic messages in diagnostics float.
-		-- DiagnosticFloatingInfo     { } , -- Used to color "Info" diagnostic messages in diagnostics float.
-		-- DiagnosticFloatingHint     { } , -- Used to color "Hint" diagnostic messages in diagnostics float.
-		-- DiagnosticFloatingOk       { } , -- Used to color "Ok" diagnostic messages in diagnostics float.
-		-- DiagnosticSignError        { } , -- Used for "Error" signs in sign column.
-		-- DiagnosticSignWarn         { } , -- Used for "Warn" signs in sign column.
-		-- DiagnosticSignInfo         { } , -- Used for "Info" signs in sign column.
-		-- DiagnosticSignHint         { } , -- Used for "Hint" signs in sign column.
-		-- DiagnosticSignOk           { } , -- Used for "Ok" signs in sign column.
-
+		DiagnosticError({ fg = error_red }),
+		DiagnosticWarn({ fg = warn_yellow }),
+		DiagnosticInfo({ fg = info_blue }),
+		DiagnosticHint({ fg = hint_gray }),
+		DiagnosticOk({ fg = ok_green }),
+		DiagnosticVirtualTextError({ DiagnosticError, bg = "#332323" }),
+		DiagnosticVirtualTextWarn({ DiagnosticWarn, bg = "#2f2c1b" }),
+		DiagnosticVirtualTextInfo({ DiagnosticInfo, bg = "#212a35" }),
+		DiagnosticVirtualTextHint({ DiagnosticHint, bg = black }),
+		DiagnosticVirtualTextOk({ DiagnosticOk, bg = "#233323" }),
+		DiagnosticUnderlineError({ gui = "undercurl", sp = error_red }),
+		DiagnosticUnderlineWarn({ gui = "undercurl", sp = warn_yellow }),
+		DiagnosticUnderlineInfo({ gui = "undercurl", sp = info_blue }),
+		DiagnosticUnderlineHint({ gui = "undercurl", sp = hint_gray }),
+		DiagnosticUnderlineOk({ gui = "undercurl", sp = ok_green }),
+		DiagnosticFloatingError({ DiagnosticError }),
+		DiagnosticFloatingWarn({ DiagnosticWarn }),
+		DiagnosticFloatingInfo({ DiagnosticInfo }),
+		DiagnosticFloatingHint({ DiagnosticHint }),
+		DiagnosticFloatingOk({ DiagnosticOk }),
+		DiagnosticSignError({ DiagnosticError }),
+		DiagnosticSignWarn({ DiagnosticWarn }),
+		DiagnosticSignInfo({ DiagnosticInfo }),
+		DiagnosticSignHint({ DiagnosticHint }),
+		DiagnosticSignOk({ DiagnosticOk }),
+		DiagnosticUnnecessary({ fg = colors.light_blue, gui = "undercurl" }),
+		DiagnosticDeprecated({ fg = gray3, gui = "strikethrough" }),
+		--
+		--
 		-- Tree-Sitter syntax groups.
 		--
 		-- See :h treesitter-highlight-groups, some groups may not be listed,
@@ -248,6 +260,16 @@ local theme = lush(function(injected_functions)
 		-- sym'@text.literal'
 		--
 		-- For more information see https://github.com/rktjmp/lush.nvim/issues/109
+		--
+		-- Use the capture names directly as the highlight groups.
+		-- To find all the capture names, see https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md#highlights)
+
+		-- Identifiers
+		sym("@variable")({ fg = colors.light0 }), -- various variable names
+		sym("@variable.builtin")({ fg = colors.neutral_purple }), -- built-in variable names (e.g. `this`)
+		sym("@variable.parameter")({ fg = colors.light0 }), -- parameters of a function, use a conspicuous color (VSCode uses the common light_blue)
+		sym("@variable.parameter.builtin")({ sym("@variable.parameter") }), -- special parameters (e.g. `_`, `it`)
+		sym("@variable.member")({ fg = colors.light0 }), -- object and struct fields
 
 		-- sym"@text.literal"      { }, -- Comment
 		-- sym"@text.reference"    { }, -- Identifier
