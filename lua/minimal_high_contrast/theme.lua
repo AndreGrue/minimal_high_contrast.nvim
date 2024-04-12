@@ -103,7 +103,7 @@ local theme = lush(function(injected_functions)
 		LineNr({ fg = colors.light2 }), -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
 		LineNrAbove({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, above the cursor line
 		LineNrBelow({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, below the cursor line
-		CursorLineNr({ fg = colors.light2 }), -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+		CursorLineNr({ fg = colors.neutral_orange }), -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
 
 		-- CursorLineFold { }, -- Like FoldColumn when 'cursorline' is set for the cursor line
 		-- CursorLineSign { }, -- Like SignColumn when 'cursorline' is set for the cursor line
@@ -223,7 +223,7 @@ local theme = lush(function(injected_functions)
 		DiagnosticVirtualTextError({ DiagnosticError, bg = "#332323" }),
 		DiagnosticVirtualTextWarn({ DiagnosticWarn, bg = "#2f2c1b" }),
 		DiagnosticVirtualTextInfo({ DiagnosticInfo, bg = "#212a35" }),
-		DiagnosticVirtualTextHint({ DiagnosticHint, bg = black }),
+		DiagnosticVirtualTextHint({ DiagnosticHint, bg = colors.black }),
 		DiagnosticVirtualTextOk({ DiagnosticOk, bg = "#233323" }),
 		DiagnosticUnderlineError({ gui = "undercurl", sp = error_red }),
 		DiagnosticUnderlineWarn({ gui = "undercurl", sp = warn_yellow }),
@@ -241,7 +241,7 @@ local theme = lush(function(injected_functions)
 		DiagnosticSignHint({ DiagnosticHint }),
 		DiagnosticSignOk({ DiagnosticOk }),
 		DiagnosticUnnecessary({ fg = colors.light_blue, gui = "undercurl" }),
-		DiagnosticDeprecated({ fg = gray3, gui = "strikethrough" }),
+		DiagnosticDeprecated({ fg = colors.dark3, gui = "strikethrough" }),
 		--
 		--
 		-- Tree-Sitter syntax groups.

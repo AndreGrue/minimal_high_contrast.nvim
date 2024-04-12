@@ -6,8 +6,10 @@ return {
 	background = hsl("#111111"),
 	foreground = hsl("#f0f0f0"),
 	comment = hsl(0, 0, 35),
-	gray = hsl(0, 0, 50),
 
+	white = hsl("#FFFFFF"),
+	gray = hsl(0, 0, 50),
+	black = hsl("#000000"),
 	xxx = hsl("#729db4"),
 
 	light0_hard = hsl("#f0f0f0"),
