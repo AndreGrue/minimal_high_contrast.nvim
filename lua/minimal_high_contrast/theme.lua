@@ -72,27 +72,50 @@ local theme = lush(function(injected_functions)
 
 		Normal({ bg = colors.background, fg = colors.foreground }), -- Normal text
 		Whitespace({ fg = Normal.fg.darken(40) }), -- "nbsp", "space", "tab" and "trail" in 'listchars'
-		Comment({ fg = colors.comment, gui = "italic" }), -- Any comment
 
-		-- ColorColumn    { }, -- Columns set with 'colorcolumn'
-		-- Conceal        { }, -- Placeholder characters substituted for concealed text (see 'conceallevel')
+		--
+		-- Git diff
+		--
+		DiffTextAdded({ bg = hsl("#214d29") }), -- diffEditor.insertedTextBackground (DiffLineAdded as its background)
+		DiffTextDeleted({ bg = hsl("#712928") }), -- diffEditor.removedTextBackground (DiffLineDeleted as its background)
+		DiffTextChanged({ bg = hsl("#0E2FDC") }),
+		DiffLineAdded({ bg = hsl("#203424") }), -- diffEditor.insertedLineBackground
+		DiffLineDeleted({ bg = hsl("#442423") }), -- diffEditor.removedLineBackground
+		DiffLineChanged({ bg = hsl("#0e2f44") }),
+		DiffAdd({ DiffLineAdded }), -- Diff mode: Added line |diff.txt|
+		DiffChange({ DiffLineChanged }), -- Diff mode: Changed line |diff.txt|
+		DiffDelete({ DiffLineDeleted }), -- Diff mode: Deleted line |diff.txt|
+		DiffText({ DiffTextChanged }), -- Diff mode: Changed text within a changed line |diff.txt|
 
-		-- Cursor         { }, -- Character under the cursor
-		-- CurSearch      { }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
+		--
+		-- Quickfix list (can be used to define qf syntax, e.g.,
+		-- ~/.config/nvim/syntax/qf.vim)
+		QfFileName({ fg = colors.white }),
+		QfSelection({ bg = hsl("#3a3d41") }), -- terminal.inactiveSelectionBackground
+		QfText({ fg = hsl("#bbbbbb") }), -- normal text in quickfix list (peekViewResult.lineForeground)
+		-- Inline hints
+		InlayHint({ fg = hsl("#969696"), bg = hsl("#242424") }), -- editorInlayHint.foreground/background
+		InlayHintType({ InlayHint }), -- editorInlayHint.typeBackground/typeForeground
+		--
+		--
+
+		--
+		-- Editor
+		--
+		CursorLine({ bg = colors.dark_blue }), -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
+		CursorColumn({ bg = colors.black3 }), -- Screen-column at the cursor, when 'cursorcolumn' is set.
+		ColorColumn({ bg = colors.black2 }), -- Columns set with 'colorcolumn'
+		Conceal({ fg = colors.gray2 }), -- Placeholder characters substituted for concealed text (see 'conceallevel')
+		Cursor({ fg = colors.background, bg = colors.foreground }), -- Character under the cursor
 		-- lCursor        { }, -- Character under the cursor when |language-mapping| is used (see 'guicursor')
 		-- CursorIM       { }, -- Like Cursor, but used when in IME mode |CursorIM|
-		-- CursorColumn   { }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
-		CursorLine({ bg = colors.dark_blue }), -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
 
 		Directory({ fg = colors.light0 }), -- Directory names (and other special names in listings)
-		-- DiffAdd        { }, -- Diff mode: Added line |diff.txt|
-		-- DiffChange     { }, -- Diff mode: Changed line |diff.txt|
-		-- DiffDelete     { }, -- Diff mode: Deleted line |diff.txt|
-		-- DiffText       { }, -- Diff mode: Changed text within a changed line |diff.txt|
-		-- EndOfBuffer    { }, -- Filler lines (~) after the end of the buffer. By default, this is highlighted like |hl-NonText|.
+		EndOfBuffer({ fg = Normal.bg }), -- Filler lines (~) after the end of the buffer. By default, this is highlighted like |hl-NonText|.
 		-- TermCursor     { }, -- Cursor in a focused terminal
 		-- TermCursorNC   { }, -- Cursor in an unfocused terminal
-		-- ErrorMsg       { }, -- Error messages on the command line
+
+		-- CurSearch      { }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
 		-- VertSplit      { }, -- Column separating vertically split windows
 		-- Folded         { }, -- Line used for closed folds
 		-- FoldColumn     { }, -- 'foldcolumn'
@@ -101,17 +124,13 @@ local theme = lush(function(injected_functions)
 		-- Substitute     { }, -- |:substitute| replacement text highlighting
 
 		LineNr({ fg = colors.light2 }), -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-		LineNrAbove({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, above the cursor line
-		LineNrBelow({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, below the cursor line
 		CursorLineNr({ fg = colors.neutral_orange }), -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+		LineNrAbove({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, above the cursor line
+		LineNrBelow({ fg = colors.dark1 }), -- Line number for when the 'relativenumber' option is set, below the cursor line
 
 		-- CursorLineFold { }, -- Like FoldColumn when 'cursorline' is set for the cursor line
 		-- CursorLineSign { }, -- Like SignColumn when 'cursorline' is set for the cursor line
 		-- MatchParen     { }, -- Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
-		-- ModeMsg        { }, -- 'showmode' message (e.g., "-- INSERT -- ")
-		-- MsgArea        { }, -- Area for messages and cmdline
-		-- MsgSeparator   { }, -- Separator for scrolled messages, `msgsep` flag of 'display'
-		-- MoreMsg        { }, -- |more-prompt|
 		-- NonText        { }, -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
 
 		NormalFloat({ bg = colors.dark3 }), -- Normal text in floating windows.
@@ -131,10 +150,16 @@ local theme = lush(function(injected_functions)
 		-- QuickFixLine   { }, -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
 		-- Search         { }, -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
 		-- SpecialKey     { }, -- Unprintable characters: text displayed differently from what it really is. But not 'listchars' whitespace. |hl-Whitespace|
-		-- SpellBad       { }, -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
-		-- SpellCap       { }, -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
-		-- SpellLocal     { }, -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
-		-- SpellRare      { }, -- Word that is recognized by the spellchecker as one that is hardly ever used. |spell| Combined with the highlighting used otherwise.
+
+		--
+		-- Spell
+		--
+		SpellBad({ gui = "undercurl", sp = error_red }), -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
+		SpellCap({ gui = "undercurl", sp = warn_yellow }), -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
+		SpellLocal({ gui = "undercurl", sp = info_blue }), -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
+		SpellRare({ gui = "undercurl", sp = info_blue }), -- Word that is recognized by the spellchecker as one that is hardly ever used. |spell| Combined with the highlighting used otherwise.
+
+		--
 		-- StatusLine     { }, -- Status line of current window
 		-- StatusLineNC   { }, -- Status lines of not-current windows. Note: If this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
 		-- TabLine        { }, -- Tab pages line, not active tab page label
@@ -143,12 +168,23 @@ local theme = lush(function(injected_functions)
 		-- Title          { }, -- Titles for output from ":set all", ":autocmd" etc.
 		-- Visual         { }, -- Visual mode selection
 		-- VisualNOS      { }, -- Visual mode selection when vim is "Not Owning the Selection".
-		-- WarningMsg     { }, -- Warning messages
 		-- Winseparator   { }, -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
 		-- WildMenu       { }, -- Current match in 'wildmenu' completion
 		-- WinBar         { }, -- Window bar of current window
 		-- WinBarNC       { }, -- Window bar of not-current windows
 
+		--
+		-- Messages
+		--
+		ErrorMsg({ fg = error_red }), -- Error messages on the command line
+		WarningMsg({ fg = warn_yellow }), -- Warning messages
+		ModeMsg({ fg = Normal.fg }), -- 'showmode' message (e.g., "-- INSERT -- ")
+		MsgArea({ fg = Normal.fg }), -- Area for messages and cmdline
+		MoreMsg({ fg = Normal.fg }), -- |more-prompt|
+		-- MsgSeparator   { }, -- Separator for scrolled messages, `msgsep` flag of 'display'
+
+		--
+		--
 		-- Common vim syntax groups used for all kinds of code and markup.
 		-- Commented-out groups should chain up to their preferred (*) group
 		-- by default.
@@ -156,6 +192,7 @@ local theme = lush(function(injected_functions)
 		-- See :h group-name
 		--
 		-- Uncomment and edit if you want more specific syntax highlighting.
+		Comment({ fg = colors.comment, gui = "italic" }), -- Any comment
 
 		Constant({ fg = colors.light0 }), -- (*) Any constant
 		String({ fg = colors.green }), --   A string constant: "this is a string"
@@ -242,7 +279,7 @@ local theme = lush(function(injected_functions)
 		DiagnosticSignOk({ DiagnosticOk }),
 		DiagnosticUnnecessary({ fg = colors.light_blue, gui = "undercurl" }),
 		DiagnosticDeprecated({ fg = colors.dark3, gui = "strikethrough" }),
-		--
+
 		--
 		-- Tree-Sitter syntax groups.
 		--
@@ -267,7 +304,7 @@ local theme = lush(function(injected_functions)
 		-- Identifiers
 		sym("@variable")({ fg = colors.light0 }), -- various variable names
 		sym("@variable.builtin")({ fg = colors.neutral_purple }), -- built-in variable names (e.g. `this`)
-		sym("@variable.parameter")({ fg = colors.light0 }), -- parameters of a function, use a conspicuous color (VSCode uses the common light_blue)
+		sym("@variable.parameter")({ fg = colors.light0 }), -- parameters of a function
 		sym("@variable.parameter.builtin")({ sym("@variable.parameter") }), -- special parameters (e.g. `_`, `it`)
 		sym("@variable.member")({ fg = colors.light0 }), -- object and struct fields
 

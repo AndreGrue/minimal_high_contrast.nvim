@@ -8,9 +8,17 @@ return {
 	comment = hsl(0, 0, 35),
 
 	white = hsl("#FFFFFF"),
+
 	gray = hsl(0, 0, 50),
+	gray1 = hsl(0, 0, 60),
+	gray2 = hsl(0, 0, 69),
+	gray3 = hsl(0, 0, 77),
+	gray4 = hsl(0, 0, 84),
+
 	black = hsl("#000000"),
-	xxx = hsl("#729db4"),
+	black2 = hsl("#0A0A0A"),
+	black3 = hsl("#0F0F0F"),
+	black4 = hsl("#1A1A1A"),
 
 	light0_hard = hsl("#f0f0f0"),
 	light0_soft = hsl("#fefefe"),
@@ -55,7 +63,7 @@ return {
 	blue = hsl(240, 100, 50),
 	bright_blue = hsl(240, 100, 70),
 	light_blue = hsl("#1C9FDD"),
-	dark_blue = hsl(240, 100, 30),
+	dark_blue = hsl(240, 80, 20),
 	neutral_blue = hsl(240, 90, 40),
 	faded_blue = hsl(240, 60, 50),
 
