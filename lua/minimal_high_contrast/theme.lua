@@ -263,13 +263,13 @@ local theme = lush(function(injected_functions)
 		String({ fg = colors.green }), --   A string constant: "this is a string"
 		Character({ fg = colors.green }), --   A character constant: 'c', '\n'
 		Number({ fg = colors.neutral_blue }), --   A number constant: 234, 0xff
-		Boolean({ fg = colors.neutral_red }), --   A boolean constant: TRUE, false
-		Float({ fg = colors.blue }), --   A floating point constant: 2.3e10
+		Boolean({ fg = colors.neutral_blue }), --   A boolean constant: TRUE, false
+		Float({ fg = colors.neutral_blue }), --   A floating point constant: 2.3e10
 
 		Identifier({ fg = colors.light0 }), -- (*) Any variable name
 		Function({ fg = colors.light0 }), --   Function name (also: methods for classes)
 
-		Statement({ fg = colors.neutral_red }), -- (*) Any statement
+		Statement({ fg = colors.light0_hard }), -- (*) Any statement
 		-- Conditional    { }, --   if, then, else, endif, switch, etc.
 		-- Repeat         { }, --   for, do, while, etc.
 		-- Label          { }, --   case, default, etc.
@@ -277,13 +277,13 @@ local theme = lush(function(injected_functions)
 		-- Keyword        { }, --   any other keyword
 		-- Exception      { }, --   try, catch, throw
 
-		PreProc({ fg = colors.neutral_red }), -- (*) Generic Preprocessor
+		PreProc({ fg = colors.bright_red }), -- (*) Generic Preprocessor
 		-- Include        { }, --   Preprocessor #include
 		-- Define         { }, --   Preprocessor #define
 		-- Macro          { }, --   Same as Define
 		-- PreCondit      { }, --   Preprocessor #if, #else, #endif, etc.
 
-		Type({ fg = colors.neutral_red }), -- (*) int, long, char, etc.
+		Type({ fg = colors.bright_red }), -- (*) int, long, char, etc.
 		-- StorageClass   { }, --   static, register, volatile, etc.
 		-- Structure      { }, --   struct, union, enum, etc.
 		-- Typedef        { }, --   A typedef
