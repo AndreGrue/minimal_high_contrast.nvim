@@ -43,8 +43,9 @@
 --  `:lua require('lush').ify()`
 
 local lush = require("lush")
+local hsl = lush.hsl
 local colors = require("minimal_high_contrast.colors")
---
+
 --
 --
 local error_red = colors.neutral_red
@@ -70,8 +71,38 @@ local theme = lush(function(injected_functions)
 		-- See :h highlight-groups
 		--
 
-		Normal({ bg = colors.background, fg = colors.foreground }), -- Normal text
-		Whitespace({ fg = Normal.fg.darken(40) }), -- "nbsp", "space", "tab" and "trail" in 'listchars'
+		SelectionHighlightBackground({ bg = "#343a41" }), -- editor.selectionHighlightBackground
+		LightBulb({ fg = "#ffcc00" }), -- editorLightBulb.foreground
+		CodeLens({ fg = "#999999" }), -- editorCodeLens.foreground
+		GutterGitAdded({ fg = "#2ea043" }), -- editorGutter.addedBackground
+		GutterGitDeleted({ fg = "#f85149" }), -- editorGutter.deletedBackground
+		GutterGitModified({ fg = "#0078d4" }), -- editorGutter.modifiedBackground
+		Breadcrumb({ fg = "#a9a9a9", bg = Normal.bg }), -- breadcrumb.foreground/background
+		Title({ fg = colors.dark_blue, gui = "bold" }), -- Titles for output from ":set all", ":autocmd" etc.
+		Directory({ fg = colors.light0 }), -- Directory names (and other special names in listings)
+		GhostText({ fg = "#6b6b6b" }), -- editorGhostText.foreground
+		ProgressBar({ fg = "#0078d4" }), -- progressBar.background
+		MatchedCharacters({ fg = hsl("#2aaaff") }), -- editorSuggestWidget.highlightForeground
+		Icon({ fg = "#cccccc" }), -- icon.foreground
+		Description({ fg = colors.gray3 }), -- descriptionForeground
+		Hint({ MatchedCharacters }), -- for the hint letter in options, e.g., the q in [q]uickfix
+		Question({ fg = colors.dark_blue }), -- |hit-enter| prompt and yes/no questions
+		-- For the unused code, use Identifier's fg (9cdcfe) as the base color,
+		-- editorUnnecessaryCode.opacity is 000000aa (the alpha value is aa),
+		-- so the color will be 9cdcfeaa. Converting hexa to hex gets 729db4.
+		UnnecessaryCode({ fg = "#729db4" }),
+
+		ScrollbarSlider({ bg = hsl("#434343") }), -- the slider on the scrollbar (scrollbarSlider.activeBackground)
+		ScrollbarSliderHover({ bg = hsl("#4f4f4f") }), -- scrollbarSlider.hoverBackground
+
+		--
+		--
+		--
+		PeekViewBorder({ fg = "#3794ff" }),
+		PeekViewNormal({ bg = colors.background }), -- peekViewEditor.background
+		PeekViewTitle({ fg = colors.white }), -- peekViewTitleLabel.foreground
+		PeekViewCursorLine({ bg = colors.black3 }),
+		PeekViewMatchHighlight({ bg = "#5d4616" }), -- peekViewEditor.matchHighlightBackground
 
 		--
 		-- Git diff
@@ -93,63 +124,102 @@ local theme = lush(function(injected_functions)
 		QfFileName({ fg = colors.white }),
 		QfSelection({ bg = hsl("#3a3d41") }), -- terminal.inactiveSelectionBackground
 		QfText({ fg = hsl("#bbbbbb") }), -- normal text in quickfix list (peekViewResult.lineForeground)
-		-- Inline hints
-		InlayHint({ fg = hsl("#969696"), bg = hsl("#242424") }), -- editorInlayHint.foreground/background
-		InlayHintType({ InlayHint }), -- editorInlayHint.typeBackground/typeForeground
-		--
-		--
+		QuickFixLine({ QfSelection }), -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
 
 		--
-		-- Editor
+		-- Inline hints
 		--
-		CursorLine({ bg = colors.dark_blue }), -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
+		InlayHint({ fg = hsl("#969696"), bg = hsl("#242424") }), -- editorInlayHint.foreground/background
+		InlayHintType({ InlayHint }), -- editorInlayHint.typeBackground/typeForeground
+
+		--
+		-- Cursor
+		--
+		CursorLine({ bg = colors.cursor }), -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
 		CursorColumn({ bg = colors.black3 }), -- Screen-column at the cursor, when 'cursorcolumn' is set.
-		ColorColumn({ bg = colors.black2 }), -- Columns set with 'colorcolumn'
+		ColorColumn({ bg = colors.black3 }), -- Columns set with 'colorcolumn'
 		Conceal({ fg = colors.gray2 }), -- Placeholder characters substituted for concealed text (see 'conceallevel')
 		Cursor({ fg = colors.background, bg = colors.foreground }), -- Character under the cursor
 		-- lCursor        { }, -- Character under the cursor when |language-mapping| is used (see 'guicursor')
 		-- CursorIM       { }, -- Like Cursor, but used when in IME mode |CursorIM|
-
-		Directory({ fg = colors.light0 }), -- Directory names (and other special names in listings)
-		EndOfBuffer({ fg = Normal.bg }), -- Filler lines (~) after the end of the buffer. By default, this is highlighted like |hl-NonText|.
 		-- TermCursor     { }, -- Cursor in a focused terminal
 		-- TermCursorNC   { }, -- Cursor in an unfocused terminal
 
+		--
+		-- Search
+		--
+		Search({ bg = "#623315" }), -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
 		-- CurSearch      { }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
-		-- VertSplit      { }, -- Column separating vertically split windows
-		-- Folded         { }, -- Line used for closed folds
-		-- FoldColumn     { }, -- 'foldcolumn'
-		-- SignColumn     { }, -- Column where |signs| are displayed
-		-- IncSearch      { }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
+		IncSearch({ bg = "#9e6a03" }), -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
 		-- Substitute     { }, -- |:substitute| replacement text highlighting
 
+		--
+		--
+		--
+		Normal({ bg = colors.background, fg = colors.foreground }), -- Normal text
+		NormalNC({ fg = colors.gray }), -- normal text in non-current windowsversion
+		Whitespace({ fg = colors.gray }), -- "nbsp", "space", "tab" and "trail" in 'listchars'
+		NonText({ fg = colors.gray }), -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
+		SpecialKey({ NonText }), -- Unprintable characters: text displayed differently from what it really is. But not 'listchars' whitespace. |hl-Whitespace|
+		EndOfBuffer({ fg = Normal.bg }), -- Filler lines (~) after the end of the buffer. By default, this is highlighted like |hl-NonText|.
+		MatchParen({ bg = colors.gray, gui = "bold, underline" }), -- Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+
+		--
+		-- Visual
+		--
+		Visual({ bg = hsl("#353537") }), -- Visual mode selection
+		-- VisualNOS({}), -- Visual mode selection when vim is "Not Owning the Selection".
+
+		--
+		-- Line numbers
+		--
 		LineNr({ fg = colors.light2 }), -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-		CursorLineNr({ fg = colors.neutral_orange }), -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+		CursorLineNr({ fg = colors.faded_orange }), -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
 		LineNrAbove({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, above the cursor line
-		LineNrBelow({ fg = colors.dark1 }), -- Line number for when the 'relativenumber' option is set, below the cursor line
+		LineNrBelow({ fg = colors.dark4 }), -- Line number for when the 'relativenumber' option is set, below the cursor line
 
-		-- CursorLineFold { }, -- Like FoldColumn when 'cursorline' is set for the cursor line
-		-- CursorLineSign { }, -- Like SignColumn when 'cursorline' is set for the cursor line
-		-- MatchParen     { }, -- Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
-		-- NonText        { }, -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
+		--
+		-- Status line
+		--
+		StatusLine({ bg = colors.black4 }), -- Status line of current window
+		StatusLineNC({ bg = colors.black4, fg = colors.gray }), -- Status lines of not-current windows. Note: If this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
 
-		NormalFloat({ bg = colors.dark3 }), -- Normal text in floating windows.
-		-- FloatBorder    { }, -- Border of floating windows.
-		-- FloatTitle     { }, -- Title of floating windows.
+		--
+		-- Tab line
+		--
+		TabLine({ fg = colors.gray, bg = colors.black4, gui = "underline", sp = colors.dark1 }), -- Tab pages line, not active tab page label
+		TabLineFill({ fg = "NONE", bg = colors.black4, gui = "underline", sp = colors.dark1 }), -- Tab pages line, where there are no labels
+		TabLineSel({ fg = colors.white, bg = Normal.bg, gui = "bold, underline", sp = colors.dark1 }), -- Tab pages line, active tab page label
+		TabBorder({ fg = colors.dark1 }), -- tab.borders
 
-		-- NormalNC       { }, -- normal text in non-current windows
-		-- Pmenu          { }, -- Popup menu: Normal item.
-		-- PmenuSel       { }, -- Popup menu: Selected item.
+		--
+		-- Window [bar]
+		--
+		WinBar({ bg = Normal.bg, fg = colors.light4 }), -- Window bar of current window
+		WinBarNC({ bg = Normal.bg, fg = colors.light4 }), -- Window bar of not-current windows
+		WinSeparator({ fg = colors.dark3 }), -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
+		VirtSplit({ WinSeparator }), -- deprecated and use WinSeparator instead
+		VertSplit({ WinSeparator }), -- Column separating vertically split windows
+
+		--
+		-- Popup menu
+		--
+		Pmenu({ fg = Normal.fg, bg = Normal.bg }), -- Popup menu: Normal item.
+		PmenuSel({ fg = colors.light0, bg = colors.bright_blue }), -- Popup menu: Selected item.
 		-- PmenuKind      { }, -- Popup menu: Normal item "kind"
 		-- PmenuKindSel   { }, -- Popup menu: Selected item "kind"
 		-- PmenuExtra     { }, -- Popup menu: Normal item "extra text"
 		-- PmenuExtraSel  { }, -- Popup menu: Selected item "extra text"
-		-- PmenuSbar      { }, -- Popup menu: Scrollbar.
-		-- PmenuThumb     { }, -- Popup menu: Thumb of the scrollbar.
-		-- Question       { }, -- |hit-enter| prompt and yes/no questions
-		-- QuickFixLine   { }, -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
-		-- Search         { }, -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
-		-- SpecialKey     { }, -- Unprintable characters: text displayed differently from what it really is. But not 'listchars' whitespace. |hl-Whitespace|
+		PmenuSbar({ bg = Normal.bg }), -- Popup menu: Scrollbar.
+		PmenuThumb({ ScrollbarSlider }), -- Popup menu: Thumb of the scrollbar.
+		WildMenu({ PmenuSel }), -- Current match in 'wildmenu' completion
+
+		--
+		-- Float
+		--
+		NormalFloat({ Pmenu }), -- Normal text in floating windows.
+		FloatBorder({ fg = colors.dark4 }), -- Border of floating windows.
+		FloatTitle({ fg = colors.light4 }), -- Title of floating windows.
 
 		--
 		-- Spell
@@ -160,20 +230,6 @@ local theme = lush(function(injected_functions)
 		SpellRare({ gui = "undercurl", sp = info_blue }), -- Word that is recognized by the spellchecker as one that is hardly ever used. |spell| Combined with the highlighting used otherwise.
 
 		--
-		-- StatusLine     { }, -- Status line of current window
-		-- StatusLineNC   { }, -- Status lines of not-current windows. Note: If this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
-		-- TabLine        { }, -- Tab pages line, not active tab page label
-		-- TabLineFill    { }, -- Tab pages line, where there are no labels
-		-- TabLineSel     { }, -- Tab pages line, active tab page label
-		-- Title          { }, -- Titles for output from ":set all", ":autocmd" etc.
-		-- Visual         { }, -- Visual mode selection
-		-- VisualNOS      { }, -- Visual mode selection when vim is "Not Owning the Selection".
-		-- Winseparator   { }, -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
-		-- WildMenu       { }, -- Current match in 'wildmenu' completion
-		-- WinBar         { }, -- Window bar of current window
-		-- WinBarNC       { }, -- Window bar of not-current windows
-
-		--
 		-- Messages
 		--
 		ErrorMsg({ fg = error_red }), -- Error messages on the command line
@@ -182,6 +238,15 @@ local theme = lush(function(injected_functions)
 		MsgArea({ fg = Normal.fg }), -- Area for messages and cmdline
 		MoreMsg({ fg = Normal.fg }), -- |more-prompt|
 		-- MsgSeparator   { }, -- Separator for scrolled messages, `msgsep` flag of 'display'
+
+		--
+		-- Fold
+		--
+		Folded({ bg = colors.dark1 }), -- Line used for closed folds
+		FoldColumn({ LineNr }), -- 'foldcolumn'
+		CursorLineFold({ CursorLineNr }), -- Like FoldColumn when 'cursorline' is set for the cursor line
+		SignColumn({ bg = Normal.bg }), -- Column where |signs| are displayed
+		-- CursorLineSign { }, -- Like SignColumn when 'cursorline' is set for the cursor line
 
 		--
 		--
@@ -197,7 +262,7 @@ local theme = lush(function(injected_functions)
 		Constant({ fg = colors.light0 }), -- (*) Any constant
 		String({ fg = colors.green }), --   A string constant: "this is a string"
 		Character({ fg = colors.green }), --   A character constant: 'c', '\n'
-		Number({ fg = colors.blue }), --   A number constant: 234, 0xff
+		Number({ fg = colors.neutral_blue }), --   A number constant: 234, 0xff
 		Boolean({ fg = colors.neutral_red }), --   A boolean constant: TRUE, false
 		Float({ fg = colors.blue }), --   A floating point constant: 2.3e10
 

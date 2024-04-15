@@ -4,8 +4,9 @@ local hsl = lush.hsl
 -- palette
 return {
 	background = hsl("#111111"),
-	foreground = hsl("#f0f0f0"),
-	comment = hsl(0, 0, 35),
+	foreground = hsl("#f7f7f7"),
+	comment = hsl(0, 0, 40),
+	cursor = hsl("#191970"),
 
 	white = hsl("#FFFFFF"),
 
@@ -33,7 +34,7 @@ return {
 	dark0 = hsl("#182227"),
 	dark1 = hsl("#2a343a"),
 	dark2 = hsl("#2e373b"),
-	dark3 = hsl("#3f4b52"),
+	dark3 = hsl("#3f4542"),
 	dark4 = hsl("#555e61"),
 
 	purple = hsl(280, 87, 53),
@@ -60,12 +61,12 @@ return {
 	neutral_red = hsl(0, 90, 40),
 	faded_red = hsl(0, 60, 50),
 
-	blue = hsl(240, 100, 50),
-	bright_blue = hsl(240, 100, 70),
+	blue = hsl("#0000FF"),
+	bright_blue = hsl("#70A0FF"),
 	light_blue = hsl("#1C9FDD"),
-	dark_blue = hsl(240, 80, 20),
-	neutral_blue = hsl(240, 90, 40),
-	faded_blue = hsl(240, 60, 50),
+	dark_blue = hsl("#2525bf"),
+	neutral_blue = hsl("#0080FF"),
+	faded_blue = hsl("#6060A0"),
 
 	green = hsl(120, 100, 25),
 	bright_green = hsl(120, 100, 40),
