@@ -260,21 +260,21 @@ local theme = lush(function(injected_functions)
 
 		Constant({ fg = colors.light0 }), -- (*) Any constant
 		String({ fg = colors.green }), --   A string constant: "this is a string"
-		Character({ fg = colors.green }), --   A character constant: 'c', '\n'
-		Number({ fg = colors.neutral_blue }), --   A number constant: 234, 0xff
-		Boolean({ fg = colors.neutral_blue }), --   A boolean constant: TRUE, false
-		Float({ fg = colors.neutral_blue }), --   A floating point constant: 2.3e10
+		Character({ String }), --   A character constant: 'c', '\n'
+		Number({ fg = colors.bright_blue }), --   A number constant: 234, 0xff
+		Boolean({ Number }), --   A boolean constant: TRUE, false
+		Float({ Number }), --   A floating point constant: 2.3e10
 
 		Identifier({ fg = colors.light0 }), -- (*) Any variable name
-		Function({ fg = colors.light0 }), --   Function name (also: methods for classes)
+		Function({ fg = colors.warm_yellow }), --   Function name (also: methods for classes)
 
-		Statement({ fg = colors.light0_hard }), -- (*) Any statement
-		Conditional({ fg = colors.neutral_orange }), --   if, then, else, endif, switch, etc.
-		-- Repeat         { }, --   for, do, while, etc.
-		-- Label          { }, --   case, default, etc.
-		-- Operator       { }, --   "sizeof", "+", "*", etc.
-		-- Keyword        { }, --   any other keyword
-		-- Exception      { }, --   try, catch, throw
+		Statement({ fg = colors.bright_orange }), -- (*) Any statement
+		Conditional({ Statement }), --   if, then, else, endif, switch, etc.
+		Repeat({ Statement }), --   for, do, while, etc.
+		Label({ Statement }), --   case, default, etc.
+		Operator({ fg = colors.light0 }), --   "sizeof", "+", "*", etc.
+		Keyword({ Statement }), --   any other keyword
+		Exception({ Statement }), --   try, catch, throw
 
 		PreProc({ fg = colors.faded_yellow }), -- (*) Generic Preprocessor
 		Include({ PreProc }), --   Preprocessor #include
@@ -282,22 +282,22 @@ local theme = lush(function(injected_functions)
 		Macro({ PreProc }), --   Same as Define
 		PreCondit({ PreProc }), --   Preprocessor #if, #else, #endif, etc.
 
-		Type({ fg = colors.bright_red }), -- (*) int, long, char, etc.
-		-- StorageClass   { }, --   static, register, volatile, etc.
-		-- Structure      { }, --   struct, union, enum, etc.
-		-- Typedef        { }, --   A typedef
+		Type({ fg = colors.light0 }), -- (*) int, long, char, etc.
+		StorageClass({ Statement }), --   static, register, volatile, etc.
+		Structure({ Statement }), --   struct, union, enum, etc.
+		Typedef({ Statement }), --   A typedef
 
 		Special({ fg = colors.light0 }), -- (*) Any special symbol
-		-- SpecialChar    { }, --   Special character in a constant
-		-- Tag            { }, --   You can use CTRL-] on this
-		-- Delimiter      { }, --   Character that needs attention
-		-- SpecialComment { }, --   Special things inside a comment (e.g. '\n')
-		-- Debug          { }, --   Debugging statements
+		SpecialChar({ Special }), --   Special character in a constant
+		Tag({ Special }), --   You can use CTRL-] on this
+		Delimiter({ Special }), --   Character that needs attention
+		SpecialComment({ Special }), --   Special things inside a comment (e.g. '\n')
+		Debug({ Special }), --   Debugging statements
 
-		-- Underlined     { gui = "underline" }, -- Text that stands out, HTML links
+		Underlined({ gui = "underline" }), -- Text that stands out, HTML links
 		-- Ignore         { }, -- Left blank, hidden |hl-Ignore| (NOTE: May be invisible here in template)
-		-- Error          { }, -- Any erroneous construct
-		-- Todo           { }, -- Anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+		Error({ fg = error_red }), -- Any erroneous construct
+		Todo({ fg = colors.background, bg = colors.yellow, gui = "bold" }), -- Anything that needs extra attention; mostly the keywords TODO FIXME and XXX
 
 		-- These groups are for the native LSP client and diagnostic system. Some
 		-- other LSP clients may use these groups, or use their own. Consult your

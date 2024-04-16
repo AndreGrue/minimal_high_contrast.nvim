@@ -48,10 +48,11 @@ return {
 	dark_yellow = hsl(60, 100, 30),
 	neutral_yellow = hsl(60, 90, 40),
 	faded_yellow = hsl(60, 55, 50),
+	warm_yellow = hsl("#FFCF40"),
 
 	orange = hsl(20, 100, 56),
-	bright_orange = hsl(20, 100, 76),
-	dark_orange = hsl(20, 100, 36),
+	bright_orange = hsl(36, 100, 50),
+	dark_orange = hsl(33, 100, 50),
 	neutral_orange = hsl(20, 90, 46),
 	faded_orange = hsl(20, 55, 56),
 
@@ -64,7 +65,7 @@ return {
 	blue = hsl("#0000FF"),
 	bright_blue = hsl("#70A0FF"),
 	light_blue = hsl("#1C9FDD"),
-	dark_blue = hsl("#2525bf"),
+	dark_blue = hsl("#00008B"),
 	neutral_blue = hsl("#0080FF"),
 	faded_blue = hsl("#6060A0"),
 
