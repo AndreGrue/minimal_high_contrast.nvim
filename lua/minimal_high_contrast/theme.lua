@@ -256,7 +256,6 @@ local theme = lush(function(injected_functions)
 		--
 		-- See :h group-name
 		--
-		-- Uncomment and edit if you want more specific syntax highlighting.
 		Comment({ fg = colors.comment, gui = "italic" }), -- Any comment
 
 		Constant({ fg = colors.light0 }), -- (*) Any constant
@@ -270,18 +269,18 @@ local theme = lush(function(injected_functions)
 		Function({ fg = colors.light0 }), --   Function name (also: methods for classes)
 
 		Statement({ fg = colors.light0_hard }), -- (*) Any statement
-		-- Conditional    { }, --   if, then, else, endif, switch, etc.
+		Conditional({ fg = colors.neutral_orange }), --   if, then, else, endif, switch, etc.
 		-- Repeat         { }, --   for, do, while, etc.
 		-- Label          { }, --   case, default, etc.
 		-- Operator       { }, --   "sizeof", "+", "*", etc.
 		-- Keyword        { }, --   any other keyword
 		-- Exception      { }, --   try, catch, throw
 
-		PreProc({ fg = colors.bright_red }), -- (*) Generic Preprocessor
-		-- Include        { }, --   Preprocessor #include
-		-- Define         { }, --   Preprocessor #define
-		-- Macro          { }, --   Same as Define
-		-- PreCondit      { }, --   Preprocessor #if, #else, #endif, etc.
+		PreProc({ fg = colors.faded_yellow }), -- (*) Generic Preprocessor
+		Include({ PreProc }), --   Preprocessor #include
+		Define({ PreProc }), --   Preprocessor #define
+		Macro({ PreProc }), --   Same as Define
+		PreCondit({ PreProc }), --   Preprocessor #if, #else, #endif, etc.
 
 		Type({ fg = colors.bright_red }), -- (*) int, long, char, etc.
 		-- StorageClass   { }, --   static, register, volatile, etc.
@@ -367,11 +366,11 @@ local theme = lush(function(injected_functions)
 		-- To find all the capture names, see https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md#highlights)
 
 		-- Identifiers
-		sym("@variable")({ fg = colors.light0 }), -- various variable names
-		sym("@variable.builtin")({ fg = colors.neutral_purple }), -- built-in variable names (e.g. `this`)
-		sym("@variable.parameter")({ fg = colors.light0 }), -- parameters of a function
-		sym("@variable.parameter.builtin")({ sym("@variable.parameter") }), -- special parameters (e.g. `_`, `it`)
-		sym("@variable.member")({ fg = colors.light0 }), -- object and struct fields
+		-- sym("@variable")({ fg = colors.light0 }), -- various variable names
+		-- sym("@variable.builtin")({ fg = colors.neutral_purple }), -- built-in variable names (e.g. `this`)
+		-- sym("@variable.parameter")({ fg = colors.light0 }), -- parameters of a function
+		-- sym("@variable.parameter.builtin")({ sym("@variable.parameter") }), -- special parameters (e.g. `_`, `it`)
+		-- sym("@variable.member")({ fg = colors.light0 }), -- object and struct fields
 
 		-- sym"@text.literal"      { }, -- Comment
 		-- sym"@text.reference"    { }, -- Identifier
@@ -406,14 +405,14 @@ local theme = lush(function(injected_functions)
 		-- sym"@repeat"            { }, -- Repeat
 		-- sym"@label"             { }, -- Label
 		-- sym"@operator"          { }, -- Operator
-		sym("@keyword")({ fg = colors.bright_purple }), -- Keyword
+		-- sym("@keyword")({ fg = colors.bright_purple }), -- Keyword
 		-- sym"@exception"         { }, -- Exception
 		-- sym"@variable"          { }, -- Identifier
 		-- sym"@type"              { }, -- Type
 		-- sym"@type.definition"   { }, -- Typedef
 		-- sym"@storageclass"      { }, -- StorageClass
 		-- sym"@structure"         { }, -- Structure
-		sym("@namespace")({ fg = colors.faded_red }), -- Identifier
+		-- sym("@namespace")({ fg = colors.faded_red }), -- Identifier
 		-- sym"@include"           { }, -- Include
 		-- sym"@preproc"           { }, -- PreProc
 		-- sym"@debug"             { }, -- Debug
