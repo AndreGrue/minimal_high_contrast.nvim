@@ -74,4 +74,7 @@ return {
 	dark_green = hsl(120, 100, 11),
 	neutral_green = hsl(120, 46, 25),
 	faded_green = hsl(120, 46, 25),
+
+	blue_green = hsl("#0D98BA"),
+	brown = hsl("#964B00"),
 }

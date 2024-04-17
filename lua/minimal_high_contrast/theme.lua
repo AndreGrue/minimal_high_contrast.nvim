@@ -71,26 +71,24 @@ local theme = lush(function(injected_functions)
 		-- See :h highlight-groups
 		--
 
-		SelectionHighlightBackground({ bg = "#343a41" }), -- editor.selectionHighlightBackground
-		LightBulb({ fg = "#ffcc00" }), -- editorLightBulb.foreground
-		CodeLens({ fg = "#999999" }), -- editorCodeLens.foreground
-		GutterGitAdded({ fg = "#2ea043" }), -- editorGutter.addedBackground
-		GutterGitDeleted({ fg = "#f85149" }), -- editorGutter.deletedBackground
-		GutterGitModified({ fg = "#0078d4" }), -- editorGutter.modifiedBackground
-		Breadcrumb({ fg = "#a9a9a9", bg = Normal.bg }), -- breadcrumb.foreground/background
-		Title({ fg = colors.dark_blue, gui = "bold" }), -- Titles for output from ":set all", ":autocmd" etc.
+		SelectionHighlightBackground({ bg = hsl("#343a41") }), -- editor.selectionHighlightBackground
+		LightBulb({ fg = hsl("#ffcc00") }), -- editorLightBulb.foreground
+		CodeLens({ fg = hsl("#999999") }), -- editorCodeLens.foreground
+		Breadcrumb({ fg = hsl("#a9a9a9"), bg = Normal.bg }), -- breadcrumb.foreground/background
 		Directory({ fg = colors.light0 }), -- Directory names (and other special names in listings)
-		GhostText({ fg = "#6b6b6b" }), -- editorGhostText.foreground
-		ProgressBar({ fg = "#0078d4" }), -- progressBar.background
+		GhostText({ fg = hsl("#6b6b6b") }), -- editorGhostText.foreground
+		ProgressBar({ fg = hsl("#0078d4") }), -- progressBar.background
 		MatchedCharacters({ fg = hsl("#2aaaff") }), -- editorSuggestWidget.highlightForeground
-		Icon({ fg = "#cccccc" }), -- icon.foreground
+		Icon({ fg = hsl("#cccccc") }), -- icon.foreground
+
 		Description({ fg = colors.gray3 }), -- descriptionForeground
+		Title({ fg = colors.light0_hard, gui = "bold" }), -- Titles for output from ":set all", ":autocmd" etc.
 		Hint({ MatchedCharacters }), -- for the hint letter in options, e.g., the q in [q]uickfix
-		Question({ fg = colors.dark_blue }), -- |hit-enter| prompt and yes/no questions
+		Question({ fg = colors.light0_hard }), -- |hit-enter| prompt and yes/no questions
 		-- For the unused code, use Identifier's fg (9cdcfe) as the base color,
 		-- editorUnnecessaryCode.opacity is 000000aa (the alpha value is aa),
 		-- so the color will be 9cdcfeaa. Converting hexa to hex gets 729db4.
-		UnnecessaryCode({ fg = "#729db4" }),
+		UnnecessaryCode({ fg = hsl("#729db4") }),
 
 		ScrollbarSlider({ bg = hsl("#434343") }), -- the slider on the scrollbar (scrollbarSlider.activeBackground)
 		ScrollbarSliderHover({ bg = hsl("#4f4f4f") }), -- scrollbarSlider.hoverBackground
@@ -98,15 +96,18 @@ local theme = lush(function(injected_functions)
 		--
 		--
 		--
-		PeekViewBorder({ fg = "#3794ff" }),
+		PeekViewBorder({ fg = hsl("#3794ff") }),
 		PeekViewNormal({ bg = colors.background }), -- peekViewEditor.background
 		PeekViewTitle({ fg = colors.white }), -- peekViewTitleLabel.foreground
 		PeekViewCursorLine({ bg = colors.black3 }),
-		PeekViewMatchHighlight({ bg = "#5d4616" }), -- peekViewEditor.matchHighlightBackground
+		PeekViewMatchHighlight({ bg = hsl("#5d4616") }), -- peekViewEditor.matchHighlightBackground
 
 		--
 		-- Git diff
 		--
+		GutterGitAdded({ fg = hsl("#2ea043") }), -- editorGutter.addedBackground
+		GutterGitDeleted({ fg = hsl("#f85149") }), -- editorGutter.deletedBackground
+		GutterGitModified({ fg = hsl("#0078d4") }), -- editorGutter.modifiedBackground
 		DiffTextAdded({ bg = hsl("#214d29") }), -- diffEditor.insertedTextBackground (DiffLineAdded as its background)
 		DiffTextDeleted({ bg = hsl("#712928") }), -- diffEditor.removedTextBackground (DiffLineDeleted as its background)
 		DiffTextChanged({ bg = hsl("#0E2FDC") }),
@@ -117,6 +118,9 @@ local theme = lush(function(injected_functions)
 		DiffChange({ DiffLineChanged }), -- Diff mode: Changed line |diff.txt|
 		DiffDelete({ DiffLineDeleted }), -- Diff mode: Deleted line |diff.txt|
 		DiffText({ DiffTextChanged }), -- Diff mode: Changed text within a changed line |diff.txt|
+		diffAdded({ GutterGitAdded }),
+		diffRemoved({ GutterGitDeleted }),
+		diffChanged({ GutterGitModified }),
 
 		--
 		-- Quickfix list (can be used to define qf syntax, e.g.,
@@ -148,9 +152,9 @@ local theme = lush(function(injected_functions)
 		--
 		-- Search
 		--
-		Search({ bg = "#623315" }), -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
+		Search({ bg = hsl("#623315") }), -- Last search pattern highlighting (see 'hlsearch'). Also used for similar items that need to stand out.
 		-- CurSearch      { }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
-		IncSearch({ bg = "#9e6a03" }), -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
+		IncSearch({ bg = hsl("#9e6a03") }), -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
 		-- Substitute     { }, -- |:substitute| replacement text highlighting
 
 		--
@@ -299,18 +303,20 @@ local theme = lush(function(injected_functions)
 		Error({ fg = error_red }), -- Any erroneous construct
 		Todo({ fg = colors.background, bg = colors.yellow, gui = "bold" }), -- Anything that needs extra attention; mostly the keywords TODO FIXME and XXX
 
+		--
 		-- These groups are for the native LSP client and diagnostic system. Some
 		-- other LSP clients may use these groups, or use their own. Consult your
 		-- LSP client's documentation.
 
 		-- See :h lsp-highlight, some groups may not be listed, submit a PR fix to lush-template!
 		--
-		-- LspReferenceText            { } , -- Used for highlighting "text" references
-		-- LspReferenceRead            { } , -- Used for highlighting "read" references
-		-- LspReferenceWrite           { } , -- Used for highlighting "write" references
-		-- LspCodeLens                 { } , -- Used to color the virtual text of the codelens. See |nvim_buf_set_extmark()|.
-		-- LspCodeLensSeparator        { } , -- Used to color the seperator between two or more code lens.
-		-- LspSignatureActiveParameter { } , -- Used to highlight the active parameter in the signature help. See |vim.lsp.handlers.signature_help()|.
+		LspReferenceText({ SelectionHighlightBackground }), -- Used for highlighting "text" references
+		LspReferenceRead({ SelectionHighlightBackground }), -- Used for highlighting "read" references
+		LspReferenceWrite({ SelectionHighlightBackground }), -- Used for highlighting "write" references
+		LspCodeLens({ CodeLens }), -- Used to color the virtual text of the codelens. See |nvim_buf_set_extmark()|.
+		-- LspCodeLensSeparator({}), -- Used to color the seperator between two or more code lens.
+		LspSignatureActiveParameter({ MatchedCharacters }), -- Used to highlight the active parameter in the signature help. See |vim.lsp.handlers.signature_help()|.
+		LspInlayHint({ InlayHint }),
 
 		--
 		-- Diagnostics
@@ -321,11 +327,11 @@ local theme = lush(function(injected_functions)
 		DiagnosticInfo({ fg = info_blue }),
 		DiagnosticHint({ fg = hint_gray }),
 		DiagnosticOk({ fg = ok_green }),
-		DiagnosticVirtualTextError({ DiagnosticError, bg = "#332323" }),
-		DiagnosticVirtualTextWarn({ DiagnosticWarn, bg = "#2f2c1b" }),
-		DiagnosticVirtualTextInfo({ DiagnosticInfo, bg = "#212a35" }),
+		DiagnosticVirtualTextError({ DiagnosticError, bg = hsl("#332323") }),
+		DiagnosticVirtualTextWarn({ DiagnosticWarn, bg = hsl("#2f2c1b") }),
+		DiagnosticVirtualTextInfo({ DiagnosticInfo, bg = hsl("#212a35") }),
 		DiagnosticVirtualTextHint({ DiagnosticHint, bg = colors.black }),
-		DiagnosticVirtualTextOk({ DiagnosticOk, bg = "#233323" }),
+		DiagnosticVirtualTextOk({ DiagnosticOk, bg = hsl("#233323") }),
 		DiagnosticUnderlineError({ gui = "undercurl", sp = error_red }),
 		DiagnosticUnderlineWarn({ gui = "undercurl", sp = warn_yellow }),
 		DiagnosticUnderlineInfo({ gui = "undercurl", sp = info_blue }),
@@ -417,6 +423,37 @@ local theme = lush(function(injected_functions)
 		-- sym"@preproc"           { }, -- PreProc
 		-- sym"@debug"             { }, -- Debug
 		-- sym"@tag"               { }, -- Tag
+		--
+
+		--
+		-- Markup
+		--
+		sym("@markup.strong")({ fg = colors.foreground, gui = "bold" }), -- bold text
+		sym("@markup.italic")({ fg = colors.foreground, gui = "italic" }), -- text with emphasis
+		sym("@markup.strikethrough")({ fg = colors.foreground, gui = "strikethrough" }), -- strikethrough text
+		sym("@markup.underline")({ fg = colors.foreground, gui = "underline" }), -- underlined text (only for literal underline markup!)
+
+		sym("@markup.heading")({ Title }), -- headings, titles (including markers)
+		sym("@markup.heading.1")({ sym("@markup.heading") }),
+		sym("@markup.heading.2")({ sym("@markup.heading") }),
+		sym("@markup.heading.3")({ sym("@markup.heading") }),
+		sym("@markup.heading.4")({ sym("@markup.heading") }),
+		sym("@markup.heading.5")({ sym("@markup.heading") }),
+		sym("@markup.heading.6")({ sym("@markup.heading") }),
+
+		sym("@markup.quote")({ fg = colors.green }), -- block quotes
+		sym("@markup.math")({ fg = colors.blue_green }), -- math environments (e.g. `$ ... $` in LaTeX)
+
+		sym("@markup.link")({ fg = colors.purple }), -- text references, footnotes, citations, etc.
+		sym("@markup.link.label")({ sym("@markup.link") }), -- non-url links
+		sym("@markup.link.url")({ sym("@markup.link") }), -- url links in markup
+
+		sym("@markup.raw")({ fg = colors.brown }), -- literal or verbatim text (e.g., inline code)
+		sym("@markup.raw.block")({ fg = colors.light4 }), -- literal or verbatim text as a stand-alone block
+
+		sym("@markup.list")({ fg = colors.bright_blue }), -- list markers
+		-- sym("@markup.list.checked") { }, -- checked todo-style list markers
+		-- sym("@markup.list.unchecked") { }, -- unchecked todo-style list markers
 	}
 end)
 
