@@ -51,8 +51,9 @@ local colors = require("minimal_high_contrast.colors")
 local error_red = colors.neutral_red
 local warn_yellow = colors.neutral_yellow
 local info_blue = colors.neutral_blue
-local hint_gray = colors.dark2
+local hint_gray = colors.gray2
 local ok_green = colors.neutral_green
+local selection_blue = colors.bright_blue
 
 -- LSP/Linters mistakenly show `undefined global` errors in the spec, they may
 -- support an annotation like the following. Consult your server documentation.
@@ -372,11 +373,15 @@ local theme = lush(function(injected_functions)
 		-- To find all the capture names, see https://github.com/nvim-treesitter/nvim-treesitter/blob/master/CONTRIBUTING.md#highlights)
 
 		-- Identifiers
-		-- sym("@variable")({ fg = colors.light0 }), -- various variable names
-		-- sym("@variable.builtin")({ fg = colors.neutral_purple }), -- built-in variable names (e.g. `this`)
-		-- sym("@variable.parameter")({ fg = colors.light0 }), -- parameters of a function
-		-- sym("@variable.parameter.builtin")({ sym("@variable.parameter") }), -- special parameters (e.g. `_`, `it`)
-		-- sym("@variable.member")({ fg = colors.light0 }), -- object and struct fields
+		sym("@variable")({ fg = colors.light0 }), -- various variable names
+		sym("@variable.builtin")({ fg = colors.faded_purple }), -- built-in variable names (e.g. `this`)
+		sym("@variable.parameter")({ fg = colors.light0 }), -- parameters of a function
+		sym("@variable.parameter.builtin")({ sym("@variable.parameter") }), -- special parameters (e.g. `_`, `it`)
+		sym("@variable.member")({ fg = colors.light0 }), -- object and struct fields
+
+		sym("@constant")({ Constant }), -- constant identifiers
+		sym("@constant.builtin")({ Constant }), -- built-in constant values
+		sym("@constant.macro")({ Constant }), -- constants defined by the preprocessor
 
 		-- sym"@text.literal"      { }, -- Comment
 		-- sym"@text.reference"    { }, -- Identifier
@@ -384,21 +389,40 @@ local theme = lush(function(injected_functions)
 		-- sym"@text.uri"          { }, -- Underlined
 		-- sym"@text.underline"    { }, -- Underlined
 		-- sym"@text.todo"         { }, -- Todo
-		-- sym"@comment"           { }, -- Comment
+
+		--
+		-- Comments
+		sym("@comment")({ Comment }), -- line and block comments
+		sym("@comment.documentation")({ sym("@comment") }), -- comments documenting code
+		sym("@comment.error")({ fg = error_red }), -- error-type comments (e.g., `DEPRECATED:`)
+		sym("@comment.warning")({ fg = warn_yellow }), -- warning-type comments (e.g., `WARNING:`, `FIX:`)
+		sym("@comment.hint")({ fg = hint_gray }), -- note-type comments (e.g., `NOTE:`)
+		sym("@comment.info")({ fg = info_blue }), -- info-type comments
+		sym("@comment.todo")({ Todo }), -- todo-type comments (e.g-, `TODO:`, `WIP:`)
+
 		-- sym"@punctuation"       { }, -- Delimiter
-		-- sym"@constant"          { }, -- Constant
-		-- sym"@constant.builtin"  { }, -- Special
-		-- sym"@constant.macro"    { }, -- Define
 		-- sym"@define"            { }, -- Define
 		-- sym"@macro"             { }, -- Macro
-		-- sym"@string"            { }, -- String
-		-- sym"@string.escape"     { }, -- SpecialChar
-		-- sym"@string.special"    { }, -- SpecialChar
-		-- sym"@character"         { }, -- Character
-		-- sym"@character.special" { }, -- SpecialChar
-		-- sym"@number"            { }, -- Number
-		-- sym"@boolean"           { }, -- Boolean
-		-- sym"@float"             { }, -- Float
+
+		-- Literals
+		sym("@string")({ String }), -- string literals
+		sym("@string.documentation")({ Comment }), -- string documenting code (e.g. Python docstrings)
+		sym("@string.regexp")({ String }), -- regular expressions
+		sym("@string.escape")({ String }), -- escape sequences
+		sym("@string.special")({ SpecialChar }), -- other special strings (e.g. dates)
+		sym("@string.special.symbol")({ sym("@string.special") }), -- symbols or atoms
+		sym("@string.special.url")({ sym("@string.special") }), -- URIs (e.g. hyperlinks), it's url outside markup
+		sym("@string.special.path")({ sym("@string.special") }), -- filenames
+
+		sym("@character")({ Character }), -- character literals
+		sym("@character.special")({ SpecialChar }), -- special characters (e.g. wildcards)
+
+		sym("@boolean")({ Boolean }), -- boolean literals
+		sym("@number")({ Number }), -- numeric literals
+		sym("@number.float")({ Float }), -- floating-point number literals
+		sym("@float")({ Float }), -- Floats
+
+		--
 		-- sym"@function"          { }, -- Function
 		-- sym"@function.builtin"  { }, -- Special
 		-- sym"@function.macro"    { }, -- Macro
@@ -454,6 +478,71 @@ local theme = lush(function(injected_functions)
 		sym("@markup.list")({ fg = colors.bright_blue }), -- list markers
 		-- sym("@markup.list.checked") { }, -- checked todo-style list markers
 		-- sym("@markup.list.unchecked") { }, -- unchecked todo-style list markers
+
+		--
+		-- nvim-cmp
+		--
+		CmpItemAbbrDeprecated({ fg = colors.gray3, bg = "NONE", gui = "strikethrough" }),
+		CmpItemAbbrMatch({ MatchedCharacters, bg = "NONE" }),
+		CmpItemAbbrMatchFuzzy({ CmpItemAbbrMatch }),
+		CmpItemMenu({ Description }),
+		CmpItemKindText({ fg = "#cccccc", bg = "NONE" }),
+		CmpItemKindMethod({ fg = "#b180d7", bg = "NONE" }),
+		CmpItemKindFunction({ CmpItemKindMethod }),
+		CmpItemKindConstructor({ CmpItemKindFunction }),
+		CmpItemKindField({ fg = "#75beff", bg = "NONE" }),
+		CmpItemKindVariable({ CmpItemKindField }),
+		CmpItemKindClass({ fg = "#ee9d28", bg = "NONE" }),
+		CmpItemKindInterface({ CmpItemKindField }),
+		CmpItemKindModule({ CmpItemKindText }),
+		CmpItemKindProperty({ CmpItemKindText }),
+		CmpItemKindUnit({ CmpItemKindText }),
+		CmpItemKindValue({ CmpItemKindText }),
+		CmpItemKindEnum({ CmpItemKindClass }),
+		CmpItemKindKeyword({ CmpItemKindText }),
+		CmpItemKindSnippet({ CmpItemKindText }),
+		CmpItemKindColor({ CmpItemKindText }),
+		CmpItemKindFile({ CmpItemKindText }),
+		CmpItemKindReference({ CmpItemKindText }),
+		CmpItemKindFolder({ CmpItemKindText }),
+		CmpItemKindEnumMember({ CmpItemKindField }),
+		CmpItemKindConstant({ CmpItemKindText }),
+		CmpItemKindStruct({ CmpItemKindText }),
+		CmpItemKindEvent({ CmpItemKindClass }),
+		CmpItemKindOperator({ CmpItemKindText }),
+		CmpItemKindTypeParameter({ CmpItemKindText }),
+		-- Predefined for the winhighlight config of cmp float window
+		SuggestWidgetBorder({ FloatBorder }),
+		SuggestWidgetSelect({ bg = selection_blue }),
+
+		--
+		-- Gitsigns
+		--
+		GitSignsAdd({ GutterGitAdded }),
+		GitSignsChange({ GutterGitModified }),
+		GitSignsDelete({ GutterGitDeleted }),
+		GitSignsAddNr({ GitSignsAdd }),
+		GitSignsChangeNr({ GitSignsChange }),
+		GitSignsDeleteNr({ GitSignsDelete }),
+		GitSignsAddLn({ DiffAdd }),
+		GitSignsChangeLn({ DiffChange }),
+		GitSignsDeleteLn({ DiffDelete }),
+		GitSignsAddInline({ DiffTextAdded }),
+		GitSignsChangeInline({ DiffTextChanged }),
+		GitSignsDeleteInline({ DiffTextDeleted }),
+		--
+		-- Telescope
+		--
+		TelescopeBorder({ FloatBorder }),
+		TelescopePromptBorder({ TelescopeBorder }),
+		TelescopeResultsBorder({ TelescopePromptBorder }),
+		TelescopePreviewBorder({ TelescopePromptBorder }),
+		TelescopeSelection({ PmenuSel }),
+		TelescopeSelectionCaret({ TelescopeSelection }),
+		TelescopeMultiIcon({ fg = colors.blue_green }),
+		TelescopeMatching({ CmpItemAbbrMatch }),
+		TelescopeNormal({ Normal }),
+		TelescopePromptPrefix({ Icon }),
 	}
 end)
 

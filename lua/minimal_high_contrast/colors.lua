@@ -46,7 +46,7 @@ return {
 	yellow = hsl(60, 100, 50),
 	bright_yellow = hsl(60, 100, 80),
 	dark_yellow = hsl(60, 100, 30),
-	neutral_yellow = hsl(60, 90, 40),
+	neutral_yellow = hsl(60, 84, 50),
 	faded_yellow = hsl(60, 55, 50),
 	warm_yellow = hsl("#FFCF40"),
 
