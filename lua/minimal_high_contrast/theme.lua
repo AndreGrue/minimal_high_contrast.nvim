@@ -264,16 +264,16 @@ local theme = lush(function(injected_functions)
 		Comment({ fg = colors.comment, gui = "italic" }), -- Any comment
 
 		Constant({ fg = colors.light0 }), -- (*) Any constant
-		String({ fg = colors.green }), --   A string constant: "this is a string"
+		String({ fg = colors.neutral_green }), --   A string constant: "this is a string"
 		Character({ String }), --   A character constant: 'c', '\n'
-		Number({ fg = colors.bright_blue }), --   A number constant: 234, 0xff
+		Number({ fg = colors.neutral_blue }), --   A number constant: 234, 0xff
 		Boolean({ Number }), --   A boolean constant: TRUE, false
 		Float({ Number }), --   A floating point constant: 2.3e10
 
 		Identifier({ fg = colors.light0 }), -- (*) Any variable name
 		Function({ fg = colors.warm_yellow }), --   Function name (also: methods for classes)
 
-		Statement({ fg = colors.bright_orange }), -- (*) Any statement
+		Statement({ fg = colors.neutral_orange }), -- (*) Any statement
 		Conditional({ Statement }), --   if, then, else, endif, switch, etc.
 		Repeat({ Statement }), --   for, do, while, etc.
 		Label({ Statement }), --   case, default, etc.
@@ -287,7 +287,7 @@ local theme = lush(function(injected_functions)
 		Macro({ PreProc }), --   Same as Define
 		PreCondit({ PreProc }), --   Preprocessor #if, #else, #endif, etc.
 
-		Type({ fg = colors.light0 }), -- (*) int, long, char, etc.
+		Type({ fg = colors.neutral_orange }), -- (*) int, long, char, etc.
 		StorageClass({ Statement }), --   static, register, volatile, etc.
 		Structure({ Statement }), --   struct, union, enum, etc.
 		Typedef({ Statement }), --   A typedef
@@ -348,7 +348,9 @@ local theme = lush(function(injected_functions)
 		DiagnosticSignInfo({ DiagnosticInfo }),
 		DiagnosticSignHint({ DiagnosticHint }),
 		DiagnosticSignOk({ DiagnosticOk }),
-		DiagnosticUnnecessary({ fg = colors.light_blue, gui = "undercurl" }),
+		DiagnosticUnnecessary({ --[[ fg = colors.light_blue, ]]
+			gui = "undercurl",
+		}),
 		DiagnosticDeprecated({ fg = colors.dark3, gui = "strikethrough" }),
 
 		--
@@ -400,9 +402,10 @@ local theme = lush(function(injected_functions)
 		sym("@comment.info")({ fg = info_blue }), -- info-type comments
 		sym("@comment.todo")({ Todo }), -- todo-type comments (e.g-, `TODO:`, `WIP:`)
 
-		-- sym"@punctuation"       { }, -- Delimiter
-		-- sym"@define"            { }, -- Define
-		-- sym"@macro"             { }, -- Macro
+		-- modules
+		sym("@module")({ fg = colors.light0 }), -- modules or namespaces
+		sym("@module.builtin")({ sym("@module") }), -- built-in modules or namespaces
+		sym("@module.cpp")({ sym("@module") }), -- built-in modules or namespaces
 
 		-- Literals
 		sym("@string")({ String }), -- string literals
@@ -422,27 +425,65 @@ local theme = lush(function(injected_functions)
 		sym("@number.float")({ Float }), -- floating-point number literals
 		sym("@float")({ Float }), -- Floats
 
+		-- Types
+		sym("@type")({ fg = colors.light0 }), -- type or class definitions and annotations
+		sym("@type.builtin")({ Type }), -- built-in types
+		sym("@type.definition")({ fg = colors.light0 }), -- identifiers in type definitions (e.g. `typedef <type> <identifier>` in C)
+
+		sym("@attribute")({ fg = colors.light0 }), -- attribute annotations (e.g. Python decorators)
+		sym("@attribute.builtin")({ sym("@attribute") }), -- builtin annotations (e.g. `@property` in Python)
+		sym("@property")({ fg = colors.light0 }), -- the key in key/value pairs
+		sym("@_parent")({ fg = colors.faded_purple }), -- the key in key/value pairs
+
+		-- Function
+		sym("@function")({ Function }), -- function definitions
+		sym("@function.builtin")({ Function }), -- built-in functions
+		sym("@function.call")({ Function }), -- function calls
+		sym("@function.macro")({ Function }), -- preprocessor macros
+		sym("@function.method")({ sym("@function") }), -- method definitions
+		sym("@function.method.call")({ sym("@function.call") }), -- method calls
+
+		sym("@constructor")({ Function }), -- constructor calls and definitions
+		sym("@operator")({ Operator }), -- symbolic operators (e.g. `+` / `*`)
+
+		-- Keyword
+		sym("@keyword")({ Keyword }), -- keywords not fitting into specific categories
+		sym("@keyword.import")({ Include }), -- keywords for including modules (e.g. `import` / `from` in Python)
+		sym("@keyword.directive")({ PreProc }), -- various preprocessor directives & shebangs
+		sym("@keyword.directive.define")({ sym("@keyword.directive") }), -- preprocessor definition directives
+		sym("@keyword.coroutine")({ Function }), -- keywords related to coroutines (e.g. `go` in Go, `async/await` in Python)
+		sym("@keyword.function")({ Function }), -- keywords that define a function (e.g. `func` in Go, `def` in Python)
+		sym("@keyword.operator")({ sym("@operator") }), -- operators that are English words (e.g. `and` / `or`)
+		sym("@keyword.type")({ Structure }), -- keywords describing composite types (e.g. `struct`, `enum`)
+		sym("@keyword.modifier")({ StorageClass }), -- keywords modifying other constructs (e.g. `const`, `static`, `public`)
+		sym("@keyword.repeat")({ Repeat }), -- keywords related to loops (e.g. `for` / `while`)
+		sym("@keyword.return")({ Statement }), --  keywords like `return` and `yield`
+		sym("@keyword.debug")({ Debug }), -- keywords related to debugging
+		sym("@keyword.exception")({ Exception }), -- keywords related to exceptions (e.g. `throw` / `catch`)
+		sym("@keyword.conditional")({ Conditional }), -- keywords related to conditionals (e.g. `if` / `else`)
+		sym("@keyword.conditional.ternary")({ sym("@operator") }), -- ternary operator (e.g. `?` / `:`)
+
+		-- Punctuation
+		sym("@punctuation")({ fg = colors.light0 }), -- delimiters (e.g. `;` / `.` / `,`)
+		sym("@punctuation.delimiter")({ sym("@punctuation") }), -- delimiters (e.g. `;` / `.` / `,`)
+		sym("@punctuation.bracket")({ sym("@punctuation") }), -- brackets (e.g. `()` / `{}` / `[]`)
+		sym("@punctuation.special")({ sym("@punctuation") }), -- special symbols (e.g. `{}` in string interpolation)
+
 		--
-		-- sym"@function"          { }, -- Function
-		-- sym"@function.builtin"  { }, -- Special
-		-- sym"@function.macro"    { }, -- Macro
+		-- sym"@define"            { }, -- Define
+		-- sym"@macro"             { }, -- Macro
 		-- sym"@parameter"         { }, -- Identifier
 		-- sym"@method"            { }, -- Function
 		-- sym"@field"             { }, -- Identifier
 		-- sym"@property"          { }, -- Identifier
-		-- sym"@constructor"       { }, -- Special
 		-- sym"@conditional"       { }, -- Conditional
 		-- sym"@repeat"            { }, -- Repeat
 		-- sym"@label"             { }, -- Label
-		-- sym"@operator"          { }, -- Operator
-		-- sym("@keyword")({ fg = colors.bright_purple }), -- Keyword
 		-- sym"@exception"         { }, -- Exception
 		-- sym"@variable"          { }, -- Identifier
-		-- sym"@type"              { }, -- Type
-		-- sym"@type.definition"   { }, -- Typedef
 		-- sym"@storageclass"      { }, -- StorageClass
 		-- sym"@structure"         { }, -- Structure
-		-- sym("@namespace")({ fg = colors.faded_red }), -- Identifier
+		-- sym("@namespace")({ }), -- Identifier
 		-- sym"@include"           { }, -- Include
 		-- sym"@preproc"           { }, -- PreProc
 		-- sym"@debug"             { }, -- Debug
@@ -478,6 +519,68 @@ local theme = lush(function(injected_functions)
 		sym("@markup.list")({ fg = colors.bright_blue }), -- list markers
 		-- sym("@markup.list.checked") { }, -- checked todo-style list markers
 		-- sym("@markup.list.unchecked") { }, -- unchecked todo-style list markers
+
+		--
+		-- LSP semantic tokens
+		--
+		-- The help page :h lsp-semantic-highlight
+		-- A short guide: https://gist.github.com/swarn/fb37d9eefe1bc616c2a7e476c0bc0316
+		-- Token types and modifiers are described here: http://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
+		sym("@lsp.type.namespace")({ sym("@module") }),
+		sym("@lsp.type.type")({ sym("@type") }),
+		sym("@lsp.type.class")({ sym("@type") }),
+		sym("@lsp.type.enum")({ sym("@type") }),
+		sym("@lsp.type.interface")({ sym("@type") }),
+		sym("@lsp.type.struct")({ sym("@type") }),
+		sym("@lsp.type.typeParameter")({ sym("@type.definition") }),
+		sym("@lsp.type.parameter")({ sym("@variable.parameter") }),
+		sym("@lsp.type.variable")({ sym("@variable") }),
+		sym("@lsp.type.property")({ sym("@property") }),
+		sym("@lsp.type.enumMember")({ fg = colors.light0 }),
+		sym("@lsp.type.event")({ sym("@type") }),
+		sym("@lsp.type.function")({ sym("@function") }),
+		sym("@lsp.type.method")({ sym("@function") }),
+		sym("@lsp.type.macro")({ sym("@constant.macro") }),
+		sym("@lsp.type.keyword")({ sym("@keyword") }),
+		sym("@lsp.type.comment")({ sym("@comment") }),
+		sym("@lsp.type.string")({ sym("@string") }),
+		sym("@lsp.type.number")({ sym("@number") }),
+		sym("@lsp.type.regexp")({ sym("@string.regexp") }),
+		sym("@lsp.type.operator")({ sym("@operator") }),
+		sym("@lsp.type.decorator")({ sym("@attribute") }),
+		sym("@lsp.type.escapeSequence")({ sym("@string.escape") }),
+		sym("@lsp.type.formatSpecifier")({ fg = colors.light0 }),
+		sym("@lsp.type.builtinType")({ sym("@type.builtin") }),
+		sym("@lsp.type.typeAlias")({ sym("@type.definition") }),
+		sym("@lsp.type.unresolvedReference")({ gui = "undercurl", sp = error_red }),
+		sym("@lsp.type.lifetime")({ sym("@keyword.modifier") }),
+		sym("@lsp.type.generic")({ sym("@variable") }),
+		sym("@lsp.type.selfKeyword")({ sym("@variable.builtin") }),
+		sym("@lsp.type.selfTypeKeyword")({ sym("@variable.builtin") }),
+		sym("@lsp.type.deriveHelper")({ sym("@attribute") }),
+		sym("@lsp.type.modifier")({ sym("@keyword.modifier") }),
+		sym("@lsp.typemod.type.defaultLibrary")({ sym("@type.builtin") }),
+		sym("@lsp.typemod.typeAlias.defaultLibrary")({ sym("@type.builtin") }),
+		sym("@lsp.typemod.class.defaultLibrary")({ sym("@type.builtin") }),
+		sym("@lsp.typemod.variable.defaultLibrary")({ sym("@variable.builtin") }),
+		sym("@lsp.typemod.function.defaultLibrary")({ sym("@function.builtin") }),
+		sym("@lsp.typemod.method.defaultLibrary")({ sym("@function.builtin") }),
+		sym("@lsp.typemod.macro.defaultLibrary")({ sym("@function.builtin") }),
+		sym("@lsp.typemod.struct.defaultLibrary")({ sym("@type.builtin") }),
+		sym("@lsp.typemod.enum.defaultLibrary")({ sym("@type.builtin") }),
+		sym("@lsp.typemod.enumMember.defaultLibrary")({ sym("@constant.builtin") }),
+		sym("@lsp.typemod.variable.readonly")({ sym("@type") }),
+		sym("@lsp.typemod.variable.callable")({ sym("@function") }),
+		sym("@lsp.typemod.variable.static")({ sym("@constant") }),
+		sym("@lsp.typemod.property.readonly")({ sym("@property") }),
+		sym("@lsp.typemod.keyword.async")({ sym("@keyword.coroutine") }),
+		sym("@lsp.typemod.keyword.injected")({ sym("@keyword") }),
+		-- Set injected highlights. Mainly for Rust doc comments and also works for
+		-- other lsps that inject tokens in comments.
+		-- Ref: https://github.com/folke/tokyonight.nvim/pull/340
+		sym("@lsp.typemod.operator.injected")({ sym("@operator") }),
+		sym("@lsp.typemod.string.injected")({ sym("@string") }),
+		sym("@lsp.typemod.variable.injected")({ sym("@variable") }),
 
 		--
 		-- nvim-cmp
