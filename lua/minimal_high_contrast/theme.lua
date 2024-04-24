@@ -633,6 +633,7 @@ local theme = lush(function(injected_functions)
 		GitSignsAddInline({ DiffTextAdded }),
 		GitSignsChangeInline({ DiffTextChanged }),
 		GitSignsDeleteInline({ DiffTextDeleted }),
+
 		--
 		-- Telescope
 		--
