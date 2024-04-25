@@ -647,6 +647,19 @@ local theme = lush(function(injected_functions)
 		TelescopeMatching({ CmpItemAbbrMatch }),
 		TelescopeNormal({ Normal }),
 		TelescopePromptPrefix({ Icon }),
+
+		--
+		-- nvim-ufo
+		--
+		UfoFoldedFg({ fg = Normal.foreground }),
+		UfoFoldedBg({ bg = Folded.background }),
+		UfoPreviewBorder({ PeekViewBorder }),
+		UfoPreviewNormal({ PeekViewNormal }),
+		UfoPreviewCursorLine({ PeekViewCursorLine }),
+		UfoCursorFoldedLine({ bg = "#2F3C48", gui = "bold, italic" }),
+		UfoPreviewSbar({ PeekViewNormal }),
+		UfoPreviewThumb({ bg = "#394a4b" }),
+		UfoFoldedEllipsis({ fg = "#989ca0" }),
 	}
 end)
 
