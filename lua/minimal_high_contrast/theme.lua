@@ -660,6 +660,20 @@ local theme = lush(function(injected_functions)
 		UfoPreviewSbar({ PeekViewNormal }),
 		UfoPreviewThumb({ bg = "#394a4b" }),
 		UfoFoldedEllipsis({ fg = "#989ca0" }),
+
+		--
+		-- nvim-bqf
+		--
+		BqfPreviewFloat({ PeekViewNormal }),
+		BqfPreviewBorder({ PeekViewBorder }),
+		BqfPreviewTitle({ PeekViewTitle }),
+		BqfPreviewSbar({ PmenuSbar }),
+		BqfPreviewThumb({ PmenuThumb }),
+		BqfPreviewCursor({ Cursor }),
+		BqfPreviewCursorLine({ PeekViewCursorLine }),
+		BqfPreviewRange({ PeekViewMatchHighlight }),
+		BqfPreviewBufLabel({ Description }),
+		BqfSign({ fg = colors.blue_green }),
 	}
 end)
 
