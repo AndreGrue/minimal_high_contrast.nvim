@@ -3,7 +3,7 @@ local hsl = lush.hsl
 
 -- palette
 return {
-	background = hsl("#080808"),
+	background = hsl("#0a0a0a"),
 	foreground = hsl("#f7f7f7"),
 	comment = hsl(0, 0, 40),
 	cursor = hsl("#191970"),
