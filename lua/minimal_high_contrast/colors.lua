@@ -70,7 +70,7 @@ return {
 	dark_blue = hsl("#00008B"),
 	-- neutral_blue = hsl("#0080FF"),
 	-- neutral_blue = hsl("#8DBAE0"),
-	neutral_blue = hsl("#1a99Ff"),
+	neutral_blue = hsl("#2aa0Ff"),
 	faded_blue = hsl("#6060A0"),
 
 	green = hsl(120, 100, 25),
