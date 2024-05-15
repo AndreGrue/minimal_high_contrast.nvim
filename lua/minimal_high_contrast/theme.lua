@@ -674,6 +674,12 @@ local theme = lush(function(injected_functions)
 		BqfPreviewRange({ PeekViewMatchHighlight }),
 		BqfPreviewBufLabel({ Description }),
 		BqfSign({ fg = colors.blue_green }),
+
+		--
+		-- Harpoon
+		--
+		HarpoonBorder({ TelescopeBorder }),
+		HarpoonWindow({ TelescopeNormal }),
 	}
 end)
 
