@@ -247,7 +247,7 @@ local theme = lush(function(injected_functions)
 		--
 		-- Fold
 		--
-		Folded({ bg = colors.dark0_hard }), -- Line used for closed folds
+		Folded({ bg = colors.background }), -- Line used for closed folds
 		FoldColumn({ LineNr }), -- 'foldcolumn'
 		CursorLineFold({ CursorLineNr }), -- Like FoldColumn when 'cursorline' is set for the cursor line
 		SignColumn({ bg = Normal.bg }), -- Column where |signs| are displayed
