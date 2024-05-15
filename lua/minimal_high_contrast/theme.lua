@@ -466,6 +466,7 @@ local theme = lush(function(injected_functions)
 		-- Punctuation
 		sym("@punctuation")({ fg = colors.light0 }), -- delimiters (e.g. `;` / `.` / `,`)
 		sym("@punctuation.delimiter")({ sym("@punctuation") }), -- delimiters (e.g. `;` / `.` / `,`)
+		sym("@punctuation.delimiter.cpp")({ Statement }), -- delimiters (e.g. `;` / `.` / `,`)
 		sym("@punctuation.bracket")({ sym("@punctuation") }), -- brackets (e.g. `()` / `{}` / `[]`)
 		sym("@punctuation.special")({ sym("@punctuation") }), -- special symbols (e.g. `{}` in string interpolation)
 
