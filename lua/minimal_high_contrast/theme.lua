@@ -328,11 +328,13 @@ local theme = lush(function(injected_functions)
 		DiagnosticInfo({ fg = info_blue }),
 		DiagnosticHint({ fg = hint_gray }),
 		DiagnosticOk({ fg = ok_green }),
-		DiagnosticVirtualTextError({ DiagnosticError, bg = hsl("#332323") }),
-		DiagnosticVirtualTextWarn({ DiagnosticWarn, bg = hsl("#2f2c1b") }),
-		DiagnosticVirtualTextInfo({ DiagnosticInfo, bg = hsl("#212a35") }),
-		DiagnosticVirtualTextHint({ DiagnosticHint, bg = colors.black }),
-		DiagnosticVirtualTextOk({ DiagnosticOk, bg = hsl("#233323") }),
+
+		DiagnosticVirtualTextError({ fg = DiagnosticError.fg.desaturate(30).da(40) }),
+		DiagnosticVirtualTextWarn({ fg = DiagnosticWarn.fg.desaturate(30).da(40) }),
+		DiagnosticVirtualTextInfo({ fg = DiagnosticInfo.fg.desaturate(30).da(40) }),
+		DiagnosticVirtualTextHint({ fg = DiagnosticHint.fg.desaturate(30).da(40) }),
+		DiagnosticVirtualTextOk({ fg = DiagnosticOk.fg.desaturate(30).da(40) }),
+
 		DiagnosticUnderlineError({ gui = "undercurl", sp = error_red }),
 		DiagnosticUnderlineWarn({ gui = "undercurl", sp = warn_yellow }),
 		DiagnosticUnderlineInfo({ gui = "undercurl", sp = info_blue }),
